@@ -36,7 +36,8 @@ def hmm():
 def get_pedigree(pedigree_file, pedigree_type):
     """Read pedigree file and return a pedigre object."""
     print "In get_pedigree: " + pedigree_file + ":" + pedigree_type
-    my_parser = parser.FamilyParser(pedigree_file, pedigree_type)
+    pedigree_iter = open(pedigree_file, 'rU')
+    my_parser = parser.FamilyParser(pedigree_iter, pedigree_type)
     print my_parser
 
 def main():
@@ -54,8 +55,8 @@ def main():
 
     logging.info('Start.')
     logging.info('Command line: {}'.format(' '.join(sys.argv)))
-    get_pedigree(args.ped,'ped')
-    logging.info()
+    get_pedigree(args.ped,"ped")
+    # logging.info()
 
 if __name__ == '__main__':
     main()
