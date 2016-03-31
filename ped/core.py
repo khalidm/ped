@@ -38,10 +38,37 @@ def get_pedigree(pedigree_file, pedigree_type):
     print "In get_pedigree: " + pedigree_file + ":" + pedigree_type
     pedigree_iter = open(pedigree_file, 'rU')
     my_parser = parser.FamilyParser(pedigree_iter, pedigree_type)
-    print my_parser
+    print 'Families found in file: {0}'.format( \
+        ','.join(list(my_parser.families.keys()))
+    )
+
+    return my_parser
+
+def get_summary(my_parser, family_type):
+    for family in my_parser.families:
+        logging.info('Fam: {0}'.format(family))
+        if family_type in ['cmms', 'mip']:
+            logging.info('Expected Inheritance Models: {0}'.format(
+                my_parser.families[family].models_of_inheritance
+            )
+        )
+        logging.info('All Individuals: ')
+        for individual in my_parser.families[family].individuals:
+            logging.info(individual)
+
+        logging.info('All Affected Individuals: ')
+        for individual in my_parser.families[family].affected_individuals:
+            logging.info(individual)
+
+            #logging.info(my_parser.families[family].individuals[individual])
+            #logging.info('Affected individuals: {0} \n'.format(
+            #    ','.join(my_parser.families[family].affected_individuals)
+            #    )
+            #)
 
 def main():
     """ Main function."""
+    family_type = "ped"
     args = parse_args()
     if args.log:
         logfile = args.log
@@ -55,7 +82,8 @@ def main():
 
     logging.info('Start.')
     logging.info('Command line: {}'.format(' '.join(sys.argv)))
-    get_pedigree(args.ped,"ped")
+    my_parser = get_pedigree(args.ped,family_type)
+    get_summary(my_parser,family_type)
     # logging.info()
 
 if __name__ == '__main__':
